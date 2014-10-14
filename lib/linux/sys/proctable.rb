@@ -211,8 +211,9 @@ module Sys
         struct.policy      = stat[40].to_i
 
         # Get /proc/<pid>/status information (name, uid, euid, gid, egid)
-        IO.foreach("/proc/#{file}/status") do |line|
-          case line
+        begin
+          IO.foreach("/proc/#{file}/status") do |line|
+            case line
             when /Name:\s*?(\w+)/
               struct.name = $1
             when /Uid:\s*?(\d+)\s*?(\d+)/
@@ -221,7 +222,10 @@ module Sys
             when /Gid:\s*?(\d+)\s*?(\d+)/
               struct.gid  = $1.to_i
               struct.egid = $2.to_i
+            end
           end
+        rescue Errno::EACCES, Errno::ESRCH, Errno::ENOENT
+          next
         end
 
         # If cmdline is empty use comm instead
