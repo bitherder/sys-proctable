@@ -1,3 +1,7 @@
+== 0.9.4.XING - 14-Oct-2014
+* Protect Linux ps against a process dying by the time the status file
+  is being read.
+
 == 0.9.4 - 4-Mar-2014
 * Added support for AIX 5.3 or later courtesy of Rick Ohnemus.
 * The Solaris version now uses FFI structs instead of a packed array.
